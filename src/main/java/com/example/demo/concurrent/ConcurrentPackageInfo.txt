@@ -1,0 +1,93 @@
+//java.util.concurrent package have multiple utilities which help developing multithreaded application. 
+Introduced in java 5
+
+Example :-
+-ExecutorService
+-Callable Interface
+-Future Interface
+-Reentrant Locks
+-BlockingQueue
+
+//BlockingQueue - is a interface which implements Queue interface and have belwo implementations
+1. ArrayBlockingQueue  //check ArrayBlockingQueueExample.java
+-It is bounded i.e need to specify the size. 
+
+2. LinkedBlockingQueue
+-Optinally bounded 
+
+3. PriorityBlockingQueue  //check PriorityBlockingQueueExample.java
+-Unbounded i.e no need to specify size
+-Objects should be comparable(all wrapper classes) or we need to provide comparator
+
+//BlockingQueue Operations :
+1. Operations that throws exception
+///add(o) - add element in queue and if sufficient capacity is not available then it throws exception
+///remove(o) - removes the passed element. Compares the element using equal method
+///element() - returns the head element without removing it and throws exception if queue is empty
+
+2. Operations that returns boolean without throwing exception
+///offer(o) - returns true if element is added else false
+///poll() - returns the head element by removing it. Returns null if queue is empty
+///peek() - returns head element without removing it. Returns null if queue is empty
+
+3. Operations that block the thread
+///put(o) - it will add the element to the queue. If queue is full then it will block the thread till the 
+space is available
+///take() - returns the head element of the queue.If queue is empty , method will block the thread till an 
+element is available
+
+4. Operations with timeout
+///offer(o,timeout,timeunit)
+///poll(timeout,timeunit)
+
+**********************************
+//Fork Join Framework       //Check ForkJoinTaskExample.java
+-available from java 7
+- in  this framework if worker node has no task in pipeline then it will pick task from task queue of the other 
+busy thread to balance the workload efficiently
+-Instead of creating seperate thread pools with ExecutorService, common pool is used.
+ForkJoinPool pool = ForkJoinPool.commonPool();
+-To create seperate pools Pool pool = new ForkJoinPool();
+-Thought behind Fork Join Framework is , recursively split tasks in to sub task and execute them in parallel.
+join opertation will wait for the completion of the all tasks and will combine the result
+-ForkJoinTask<T> interface is divided into 2 abstract classes  .
+1. RecursiveAction
+//abstract void compute()    ///like run() method from Runnable
+2. RecursiveTask<T> 
+//abstract T compute()       /// call() method from Callable interface
+
+- Also it implements Future<T> inetrface. SO we can use it to extract the result once once task is done
+
+**************
+//Semaphore     //SemaphoreExample.java
+- Either application can not be thread safe i.e multiple threads are accessing same resource or it is safe 
+with synchronised method/block where only one thread can access the resource. But what if 2 therads can access 
+the resource same time , there comes Semaphore
+-semaphore instance holds the number of permits. with this first thread needs to aquire the persmission and once
+done need to release the permits
+
+*******
+//CountDownLatch   //CountDownLatchExample.java
+-Its a synchronization that allows one or more threads to wait until set of operations are performed by 
+other sub threads. Once subthreads will complete the execution then only main thread will execute.
+-CountDownLatch is initialized with some count then await method block until current count reaches to 0
+
+RealExample - If stone can be lifted by 10 people then we need to wait for all 10 to come and then finally stone
+will get lifted
+
+****
+//CyclicBarrier -      //CyclicBarrierExample.java
+- If we want to start 2 threads simultaneously. Eg A and B are two participants and they start the game once both
+are ready
+- RealExample - If we are going to picnic then we need to be ready and wait at comman place for others to join
+
+
+******
+//Blocking Algorithms are thread safe however they blocks the resource - where threads blocked resource while
+performing the operation like synchronization method/block,ReentrantLock, CountDownLatch,CyclicBarrier
+
+//Non blocking Algorithms - thread safe but doen't block the thread
+Concurrent package have provided classes for non blocking Algorithms e.g AtomicInteger,AtomicBoolean
+
+
+

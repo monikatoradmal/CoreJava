@@ -1,0 +1,96 @@
+//Thread - Its a lightwight process. It is given with stack and its own context to preserve the state. 
+Thread state enables CPU to switch it back and continue from where it stopped.
+
+//JVM internally creates few threads 
+1. main thread to execute main() method
+2. GarbageCollector for performing garbage collection 
+
+//Two ways to create thread
+1. by extending Thread class (not recommneded)
+2. by implementing Runnable interface
+
+//run() - this is entry point for thread execution like main() method is for java application
+
+//start() - after creating thread we can call start method to start the execution of thread. 
+After starting the thread it will go in Ready or Running state accoding to CPU's decision
+
+//ExecutorService - 
+Instead of executing the tasks sequentially we can create seperate threads for parallel execution. 
+But creating thread for each task is not feasible as it includes creating a seperate exection 
+context,stack exection
+
+Instead we can create pool of threads with ExecutorService and can effectively utilise it to execute all task.
+If thread is available in the pool then it will assign task to thread else it will add the task in
+ blocking queue
+and it will kept it till thread is available(check ExecutorService class for impl)
+
+***************
+//stop() - method is deprecated as stopping the thread in middle leaves the system in inconsistent state.
+
+//interrupt() - method to stop the thread.
+To check whether thread is interrupted or not -
+1. If class is extending Thread class then use interrupted() method
+2. If class is implementing Runnable interface then use Thread.isInterrupted()
+
+
+//sleep () - method is used to block the thread for gievn time interval in milliseconds.Method throws 
+interrupted exception if it is interrupted while thread is in sleeping state
+
+//Difference between sleep() and interrupt() method :
+sleep method from Thread class is used to pause the execution of the thread for a specifiled amount
+of time where thread might needs to wait for some extrenal event or if want to introduce delay
+in execution
+interrupt method is used to interrupt another thread that is taking too long time to complete.
+or when one thread needs to notify other thread to stop
+
+//wait() - with is thread waits indefinitely for another therad to perform action 
+//wait(millis) - thread that is waiting for another thread to perform an action up to specified time.
+
+//join() - waits thread execution to complete. Then next thread starts 
+t1.join() first t1 completes
+t2.join() then t2 starts
+
+
+**************
+//Thread.currentThread() - returns current threads reference 
+
+//ThreadGroup - returns all parent threads corresponding to thread
+
+//Daemon thread - Daemon threads performs background tasks such as garbage collection and 
+exists when main thread execution completes
+
+************
+//Thread Priority
+MIN_PRIORITY - 1
+NORM_PRIORITY - 5 //default
+MAX_PRIORITY - 10
+[Example - Thread which is copying files should have higher priority than thread which is showing copy status]
+//Refer ThreadingTest class
+
+
+//Callable - with Runnable interface we call run method which is a void method
+With Callable interface we can call , "call" method and can return any value.
+Check TestCallable.java
+
+//DeadLock : 
+Thread 1 locked obj1  and waiting to release lock from obj2
+Thread 2 locked obj2   and waiting to release lock from obj1
+
+//Solution for synchronized method and block - Read/write lock
+In synechronized Object is locked no matter read/write
+ReadWriteLock rw_lock = new ReentrantReadWriteLock()
+
+***inside method
+Lock lock = rw_lock.writeLock();
+lock.lock();
+
+    try()
+    //method body where write operation is performed
+    finally()
+    lock.unlock();
+
+
+//wait(),notify(),notifyAll()
+Threads can signal each other using wait,notify,notifyAll methods of the class Object.
+e.g producer and consumer
+producer thread produces the result and wait for consumer thread to notify for further action

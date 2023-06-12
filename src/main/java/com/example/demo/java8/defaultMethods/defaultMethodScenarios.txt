@@ -1,0 +1,26 @@
+Scenario 1 - 2 interfaces have same default method with either same/diff implementation.
+If class is implementing both interfaces then class will have ambiguity so class should override default method
+ and gives its own implementation/or call method from implemented interfaces
+
+ e.g Override method{
+    Interface1.super.defaultMethod();
+    or
+    Interface2.super.defaultMethod
+ }
+
+Scenario 2 - Same scenario 1 only one interface have same method as abstract and another interface have it as default.
+Then class should override method and gives its own implementation or call method from interface where 
+it is implemented with super keyword.
+
+Scenario 3 - Inteface1 have default method. Interface2 is extending Interface1 without defining 
+default method again. If Implementing class implementing Interface2 then it will have default
+method implementation from Inteface1 
+
+Scenario 4 - Interface1 have default method. Interface2 is extending Interface1 and defining same default method as 
+abstract.If class is implementing both Interface1 and Interface2 then class needs to override the method and need to give its own 
+implementation only. We can not call default method from Interface1 because we can not bypass the more specific 
+super type i.e Interface2
+
+Scenario 5 - Interface1 have default method. Interface2 is extending Interface1 and implementing same default method again
+by giving its own implementation.If class is implementing both Interface1 and Interface2 then class can call  defaultMethod
+from Interface2 only as it is a immediate super type
